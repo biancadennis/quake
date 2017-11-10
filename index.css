@@ -1,7 +1,11 @@
 table {
     font-family: arial, sans-serif;
     border-collapse: collapse;
-    width: 100%;
+    width: 70%;
+    margin: auto;
+    border-radius: 4px;	
+    background-color: #FFFFFF;	
+    box-shadow: 0 0 6px 0 rgba(178,178,178,0.5);
 }
 
 td, th {
@@ -12,4 +16,18 @@ td, th {
 
 tr:nth-child(even) {
     background-color: #CFB3DC;
+}
+body{
+    text-align: center;
+}
+form {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+#searchButton{
+    margin-left: 10px;
+    border: 2px #CFB3DC solid;
+    padding: 4px;
 }
