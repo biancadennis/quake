@@ -1,12 +1,33 @@
 $(document).ready(function() {
+//sorting algorithm
     function quakeSort(array) {
-        array.sort(function(a, b) {
-                return a["mag"] - b["mag"] || a["depth"] - b["depth"];
-            })
-        array.reverse()
-        array.splice(20)
-        return array
+        compare = function(x, y){
+            return x > y ? 1 : x < y ? -1 : 0; 
+        };
+        array.sort(function(a, b){
+    //note the minus before -cmp, for descending order
+            return compare( 
+                [compare(a.mag, b.mag), -compare(b.time, a.time)], 
+                [compare(b.mag, a.mag), -compare(a.time, b.time)]
+            );
+        });
+            array.reverse()
+            array.splice(20)
+            return array
     }
+//function for adding elements in array to dom
+    function appendToTable (array) {
+        array.forEach(function(quake) {
+            $('table tbody').append(`<tr>
+                                <td>${quake.id}</td>
+                                <td> ${moment(quake.time).format("MMM Do YYYY @ h:mm a")}</td>
+                                <td> ${quake.place}</td>
+                                <td> ${quake.mag}</td>
+                                <td><button type="button" onclick="$('#details').text('Longitude:${quake.longitude} and Latitude:${quake.latitude}')">Details</button> </td>
+                                </tr>`)
+        })
+    }
+// Request for url
     $.ajax({
         url: "http://interviewtest.getguru.com/seismic/data.json",
         method: 'GET',
@@ -14,6 +35,7 @@ $(document).ready(function() {
         success: function(response) {
             quakes = response
             quakeSort(quakes);
+//append quakes to dom
             quakes.forEach(function(quake) {
                 $('table tbody').append(`<tr>
                                     <td>${quake.id}</td>
@@ -24,7 +46,7 @@ $(document).ready(function() {
                                     </tr>`)
             })
             console.log(quakes)
-
+//sarch functionality
             $('#searchButton').click( function(event){
             var queriedQuakes = []
             var search     = $('#searchQuery');
@@ -39,6 +61,8 @@ $(document).ready(function() {
             })
             quakeSort(queriedQuakes);
             console.log(queriedQuakes)
+            $('table tbody').empty()
+            appendToTable(queriedQuakes);
             })
         }
     })
